@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 };
 
 type roomType = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export default async function Room({ params }: roomType) {
-  const { id } = params;
+  const { id } = await params;
   const room = await getOneDecisionRoom(id);
 
   return (
