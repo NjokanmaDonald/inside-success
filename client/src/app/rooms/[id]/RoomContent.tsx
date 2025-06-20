@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { joinRoom } from "@/app/lib/apiCalls/decisionRoom";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 type Props = {
   room: {
@@ -43,10 +44,14 @@ export default function RoomContent({ room }: Props) {
         if (!res.success) {
           throw new Error(res.error || "Vote failed");
         }
-      } catch (err: any) {
-        toast.error(
-          err?.response?.data?.message || err.message || "Failed to cast vote."
-        );
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data?.message || error.message);
+        } else if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Failed to join the room.");
+        }
       } finally {
         setLoading(false);
       }

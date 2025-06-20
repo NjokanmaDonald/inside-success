@@ -2,18 +2,21 @@ import { getOneDecisionRoom } from "@/app/lib/apiCalls/decisionRoom";
 import RoomContent from "./RoomContent";
 import CommentForm from "./CommentForm";
 import CommentData from "./CommentData";
+import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const { id } = await params;
-  const room = await getOneDecisionRoom(id);
-  return {
-    title: `Room - ${room.id}`,
-    description: room.description,
+export const metadata: Metadata = {
+  title: "Rooms",
+  description: "Rooms page",
+};
+
+type roomType = {
+  params: {
+    id: string;
   };
-}
+};
 
-export default async function Room({ params }: { params: { id: string } }) {
-  const { id } = await params;
+export default async function Room({ params }: roomType) {
+  const { id } = params;
   const room = await getOneDecisionRoom(id);
 
   return (

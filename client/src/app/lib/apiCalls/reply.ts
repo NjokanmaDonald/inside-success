@@ -21,10 +21,16 @@ export async function createReply({
       data: res,
       message: "Reply created successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return {
+        message: "",
+        error: error.response?.data?.message || error.message,
+      };
+    }
     return {
-      success: false,
-      error: error?.response?.data?.message || "Something went wrong",
+      message: "",
+      error: "An unexpected error occurred",
     };
   }
 }

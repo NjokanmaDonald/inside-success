@@ -22,10 +22,16 @@ export async function createRoom(
       data: res.data,
       message: "Room created successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return {
+        message: "",
+        error: error.response?.data?.message || error.message,
+      };
+    }
     return {
-      success: false,
-      error: error?.response?.data?.message || "Something went wrong",
+      message: "",
+      error: "An unexpected error occurred",
     };
   }
 }
@@ -47,10 +53,16 @@ export async function joinRoom({
       data: res,
       message: "Room joined successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return {
+        message: "",
+        error: error.response?.data?.message || error.message,
+      };
+    }
     return {
-      success: false,
-      error: error?.response?.data?.message || "Something went wrong",
+      message: "",
+      error: "An unexpected error occurred",
     };
   }
 }

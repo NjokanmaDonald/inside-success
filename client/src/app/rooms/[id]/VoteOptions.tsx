@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/app/context/authContext";
 import { castVote } from "@/app/lib/apiCalls/vote";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -57,10 +58,14 @@ export default function VoteOptions({ roomId, options }: Props) {
       localStorage.setItem(key, option);
       setVotedOption(option);
       toast.success("Vote cast successfully!");
-    } catch (err: any) {
-      toast.error(
-        err?.response?.data?.message || err.message || "Failed to cast vote."
-      );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || error.message);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to cast vote.");
+      }
     } finally {
       setLoading(false);
     }

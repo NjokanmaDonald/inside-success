@@ -1,7 +1,11 @@
 import axios from "axios";
 import { baseUrl } from "../apiConfig";
+import { login, registration } from "@/app/types";
 
-export async function registerUser(prevState: any, formData: FormData) {
+export async function registerUser(
+  prevState: registration,
+  formData: FormData
+) {
   const firstName = formData.get("firstName");
   const lastName = formData.get("lastName");
   const email = formData.get("email");
@@ -29,16 +33,21 @@ export async function registerUser(prevState: any, formData: FormData) {
       user: res.data,
       error: "",
     };
-  } catch (error: any) {
-    console.error(error);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return {
+        message: "",
+        error: error.response?.data?.message || error.message,
+      };
+    }
     return {
       message: "",
-      error: error?.response?.data?.message || error.message,
+      error: "An unexpected error occurred",
     };
   }
 }
 
-export async function userLogin(prevState: any, formData: FormData) {
+export async function userLogin(prevState: login, formData: FormData) {
   const email = formData.get("email");
   const password = formData.get("password");
 
@@ -53,12 +62,16 @@ export async function userLogin(prevState: any, formData: FormData) {
       user: res.data.data,
       error: "",
     };
-  } catch (error: any) {
-    console.error(error);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      return {
+        message: "",
+        error: error.response?.data?.message || error.message,
+      };
+    }
     return {
       message: "",
-      error: error?.response?.data?.message || error.message,
-      user: null,
+      error: "An unexpected error occurred",
     };
   }
 }

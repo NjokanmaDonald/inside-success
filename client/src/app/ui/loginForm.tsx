@@ -18,7 +18,6 @@ export function LoginForm() {
     userLogin,
     initialState
   );
-  // const router = useRouter();
 
   const inputData = [
     {

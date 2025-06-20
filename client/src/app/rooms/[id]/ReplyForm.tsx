@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/app/context/authContext";
-import { createComment } from "@/app/lib/apiCalls/comment";
 import { createReply } from "@/app/lib/apiCalls/reply";
+import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -26,10 +26,14 @@ export default function ReplyForm({ commentId }: { commentId: string }) {
       if (!res.success) {
         throw new Error(res.error || "Vote failed");
       }
-    } catch (err: any) {
-      toast.error(
-        err?.response?.data?.message || err.message || "Failed to cast vote."
-      );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || error.message);
+      } else if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to submit reply.");
+      }
     }
   };
 

@@ -15,7 +15,7 @@ export default function LoginPage() {
         <Image src="/logo.png" alt="logo" width={200} height={200} />
         <LoginForm />
         <p className="mt-1">
-          Don't have an account?{" "}
+          Don't have an account?
           <Link href="/register" className="text-blue-500">
             Register
           </Link>
