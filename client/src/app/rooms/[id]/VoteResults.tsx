@@ -27,7 +27,8 @@ export default function VoteResults({ roomId }: Props) {
       <h2 className="text-xl font-semibold">Vote Results</h2>
       {results?.votesPerOption.map((option) => (
         <li key={option.votingOption}>
-          The Option of '{option.votingOption}' has {option.count} votes
+          The Option of &apos;{option.votingOption}&apos; has {option.count}{" "}
+          votes
         </li>
       ))}
     </div>
